@@ -11,8 +11,8 @@ const Home = () => {
   const [diastolic_pressure, set_diastolic] = useState();
   const [pulse, setpulse] = useState();
   const [patientname, setpatientname] = useState();
-  const [date, setdate] = useState(`${String(date_actual.getDate())}-${String(date_actual.getMonth())}-${String(date_actual.getFullYear())}`);
-  const [Time, setTime] = useState(`${String(date_actual.getHours())}:${String(date_actual.getMinutes())}`);
+  const [date, setdate] = useState(`${String(date_actual.getDate()).padStart(2,"0")}-${String(date_actual.getMonth()+1).padStart(2, "0")}-${String(date_actual.getFullYear())}`);
+  const [Time, setTime] = useState(`${String(date_actual.getHours()).padStart(2,"0")}:${String(date_actual.getMinutes()).padStart(2,"0")}`);
 
   useEffect(() => {
     let value = localStorage.getItem("readings")
