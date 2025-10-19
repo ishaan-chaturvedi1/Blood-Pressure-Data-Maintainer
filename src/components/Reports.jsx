@@ -15,7 +15,7 @@ const Reports = () => {
   }, [])
 
   return (
-    <div className='flex justify-center items-center m-6'>
+    <div className='flex justify-center items-center p-6 bg-[#f3f3f6]'>
         {readings.length<1?<div>No readings to display.</div>:
 
           <table className='table-auto rounded-md mt-2 overflow-hidden overflow-x-hidden md:max-w-[91%] md:min-w-[91%] w-[99%]'>
