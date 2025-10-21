@@ -12,7 +12,6 @@ const Reports = () => {
       if (readings_ls){
         let main_readings = JSON.parse(readings_ls);
         setreadings(main_readings)
-        console.log(main_readings)
       }
   }, [])
 

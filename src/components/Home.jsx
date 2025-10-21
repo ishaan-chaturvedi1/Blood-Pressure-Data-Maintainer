@@ -23,6 +23,10 @@ const Home = () => {
   }, [])
     
     function saveReading(){
+      if (systolic_pressure=="" || systolic_pressure==undefined || diastolic_pressure=="" || diastolic_pressure==undefined || pulse=="" || pulse==undefined || patientname =="" || patientname==undefined || date=="" || date==undefined || Time=="" || Time==undefined){
+        alert("Please enter all the details.")
+        return
+      }
       setreadings([...readings, {patient: patientname, date:date, time:Time, systolic:systolic_pressure, diastolic:diastolic_pressure, pulse: pulse, id: uuidv4()}])
       saveToLs([...readings, {patient: patientname, date:date, time:Time, systolic:systolic_pressure, diastolic:diastolic_pressure, pulse: pulse, id: uuidv4()}])
     }
