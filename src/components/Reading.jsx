@@ -62,12 +62,16 @@ const Reading = (props) => {
 
   return (
     <tr className=''>
-        <td className={`max-w-[16.6%] min-w-[16.6%] text-black md:text-lg text-sm text-center`}>{props.patient}</td>
-        <td className={`max-w-[16.6%] min-w-[16.6%] text-black md:text-lg text-sm text-center`}>{props.date}</td>
-        <td className={`max-w-[16.6%] min-w-[16.6%] text-black md:text-lg text-sm text-center`}>{props.time}</td>
-        <td className={`max-w-[16.6%] min-w-[16.6%] ${systolic_color} md:text-lg text-sm text-center font-bold`}>{props.systolic}</td>
-        <td className={`max-w-[16.6%] min-w-[16.6%] ${diastolic_color} md:text-lg text-sm text-center font-bold`}>{props.diastolic}</td>
-        <td className={`max-w-[16.6%] min-w-[16.6%] ${pulse_color} md:text-lg text-sm text-center font-bold`}>{props.pulse}</td>
+        <td className={`max-w-[15%] min-w-[15%] text-black md:text-lg px-1 text-sm text-center`}>{props.patient}</td>
+        <td className={`max-w-[25%] min-w-[25%] text-black md:text-lg px-1 text-xs text-center`}>{props.date}</td>
+        <td className={`max-w-[10%] min-w-[10%] text-black md:text-lg px-1 text-sm text-center`}>{props.time}</td>
+        <td className={`max-w-[12%] min-w-[12%] ${systolic_color} md:text-lg px-1 text-sm text-center font-bold`}>{props.systolic}</td>
+        <td className={`max-w-[12%] min-w-[12%] ${diastolic_color} md:text-lg px-1 text-sm text-center font-bold`}>{props.diastolic}</td>
+        <td className={`max-w-[12%] min-w-[12%] ${pulse_color} md:text-lg px-1 text-sm text-center font-bold`}>{props.pulse}</td>
+        <td className={`max-w-[9%] min-w-[9%] text-black md:text-lg px-1 text-sm text-center font-bold cursor-pointer`} onClick={() => {props.deletefunction(props.id)}}>          <lord-icon className="md:w-7 w-5"
+    src="https://cdn.lordicon.com/xyfswyxf.json"
+    trigger="hover">
+</lord-icon></td>
     </tr>
   )
 }

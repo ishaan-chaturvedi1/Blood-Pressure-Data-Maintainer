@@ -37,6 +37,15 @@ const Reports = () => {
     saveAs(blob, "Report.xlsx");
   };
 
+  const deletefunction = (id) => {
+    let new_readings = readings.filter((item) => {
+        return item.id!=id
+    })
+    console.log(new_readings)
+    setreadings(new_readings)
+    localStorage.setItem("readings", JSON.stringify(new_readings))
+  }
+
 
 
   return (
@@ -45,22 +54,23 @@ const Reports = () => {
         {readings.length<1?<div>No readings to display.</div>:
 
       <>
-       <button onClick={() => {handleDownloadExcel()}} className='text-xs md:ml-13.5 md:text-md  font-bold cursor-pointer self-start bg-[#008060] p-2 rounded-lg text-white '>Download Excel</button>
+       <button onClick={() => {handleDownloadExcel()}} className='text-xs md:ml-13.5 md:text-md  font-bold cursor-pointer self-start bg-[#008060] p-2 rounded-lg px-1 text-white '>Download Excel</button>
 
           <table className='table-auto rounded-md mt-2 overflow-hidden overflow-x-hidden md:max-w-[91%] md:min-w-[91%] w-[99%]'>
               <thead className='bg-[#008060] text-white'>
                 <tr>
-                  <th className='md:text-lg text-sm'>Patient</th>
-                  <th className='md:text-lg text-sm'>Date</th>
-                  <th className='md:text-lg text-sm'>Time</th>
-                  <th className='md:text-lg text-sm'>Systolic</th>
-                  <th className='md:text-lg text-sm'>Diastolic</th>
-                  <th className='md:text-lg text-sm'>Pulse</th>
+                  <th className='md:text-lg px-1 text-sm'>Patient</th>
+                  <th className='md:text-lg px-1 text-sm'>Date</th>
+                  <th className='md:text-lg px-1 text-sm'>Time</th>
+                  <th className='md:text-lg px-1 text-sm'>Systolic</th>
+                  <th className='md:text-lg px-1 text-sm'>Diastolic</th>
+                  <th className='md:text-lg px-1 text-sm'>Pulse</th>
+                  <th className='md:text-lg px-1 text-sm'>Actions</th>
                 </tr>
               </thead>
               <tbody className='bg-white'>
                   {readings.map(item => {
-                        return <Reading key = {item.id} systolic={item.systolic} diastolic={item.diastolic} time={item.time} date={item.date} pulse={item.pulse} patient={item.patient}/>
+                        return <Reading deletefunction={deletefunction} id={item.id} key = {item.id} systolic={item.systolic} diastolic={item.diastolic} time={item.time} date={item.date} pulse={item.pulse} patient={item.patient}/>
                   })}
               </tbody>
           </table>
