@@ -2,21 +2,31 @@ import React, { useEffect, useState } from 'react'
 import Reading from "./Reading"
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { v4 as uuidv4 } from "uuid"
 
 const Reports = () => {
 
+  const [readingListSelected, setReadingListSelected] = useState(1);
   const [readings, setreadings] = useState([]);
+  const [numberOfReadings, setNumberOfReadings] = useState(1)
 
-  useEffect(() => {
-      let readings_ls = localStorage.getItem("readings");
-      if (readings_ls){
-        let main_readings = JSON.parse(readings_ls);
-        setreadings(main_readings)
-      }
-  }, [])
+useEffect(() => {
+    // ensure the count exists
+    const storedCount = localStorage.getItem("numberOfReadings");
+    if (!storedCount) {
+        localStorage.setItem("numberOfReadings", 1);
+        setNumberOfReadings(1);
+    } else {
+        setNumberOfReadings(Number(storedCount));
+    }
+
+    // load correct readings
+    const stored = localStorage.getItem("readings" + readingListSelected);
+    setreadings(stored ? JSON.parse(stored) : []);
+}, [readingListSelected]);
 
 
-    const handleDownloadExcel = () => {
+  const handleDownloadExcel = () => {
     if (readings.length === 0) return; // safety check
 
     // Remove 'id' from each object
@@ -37,46 +47,78 @@ const Reports = () => {
     saveAs(blob, "Report.xlsx");
   };
 
-  const deletefunction = (id) => {
-    let new_readings = readings.filter((item) => {
-        return item.id!=id
-    })
-    console.log(new_readings)
-    setreadings(new_readings)
-    localStorage.setItem("readings", JSON.stringify(new_readings))
-  }
+const deletefunction = (id) => {
+  let new_readings = readings.filter((item) => item.id !== id);
+
+  setreadings(new_readings);
+
+  localStorage.setItem(
+    "readings" + readingListSelected,
+    JSON.stringify(new_readings)
+  );
+};
+
 
 
 
   return (
-    <div className='flex justify-center items-center md:p-6 p-2 bg-[#f3f3f6] flex-col'>
+    <div className='flex flex-1 justify-center items-center md:p-6 p-2 bg-[#f3f3f6] flex-col'>
+      <form className="space-y-4 m-4">
+        <div className="flex gap-2 items-center justify-center">
+          {
+            Array.from({ length: numberOfReadings }).map((_, index) => {
 
-        {readings.length<1?<div>No readings to display.</div>:
 
-      <>
-       <button onClick={() => {handleDownloadExcel()}} className='text-xs md:ml-13.5 md:text-md  font-bold cursor-pointer self-start bg-[#008060] p-2 rounded-lg px-1 text-white '>Download Excel</button>
+              return <div key={uuidv4()}> <label htmlFor={`option-${index + 1}`} className="relative">
+                <input
+                  type="radio"
+                  name="choice"
+                  id={`option-${index + 1}`}
+                  value={index + 1}
+                  checked={readingListSelected === index + 1}
+                  onChange={(e) => setReadingListSelected(Number(e.target.value))}
+                  className="peer sr-only"
+                />
+                <span
+                  className="px-4 py-2 rounded-full border border-zinc-600 text-sm cursor-pointer
+                       transition bg-zinc-900 text-white
+                       peer-checked:bg-emerald-500 peer-checked:text-black peer-checked:border-emerald-500"
+                >
+                  {index + 1}
+                </span>
+              </label>
+              </div>
+            })
+          }
+        </div>
+      </form>
+
+      {readings.length < 1 ? <div>No readings to display.</div> :
+
+        <>
+          <button onClick={() => { handleDownloadExcel() }} className='text-xs md:ml-13.5 md:text-md  font-bold cursor-pointer self-start bg-[#008060] p-2 rounded-lg px-1 text-white '>Download Excel</button>
 
           <table className='table-auto rounded-md mt-2 overflow-hidden overflow-x-hidden md:max-w-[91%] md:min-w-[91%] w-[99%]'>
-              <thead className='bg-[#008060] text-white'>
-                <tr>
-                  <th className='md:text-lg px-1 text-sm'>Patient</th>
-                  <th className='md:text-lg px-1 text-sm'>Date</th>
-                  <th className='md:text-lg px-1 text-sm'>Time</th>
-                  <th className='md:text-lg px-1 text-sm'>Systolic</th>
-                  <th className='md:text-lg px-1 text-sm'>Diastolic</th>
-                  <th className='md:text-lg px-1 text-sm'>Pulse</th>
-                  <th className='md:text-lg px-1 text-sm'>Actions</th>
-                </tr>
-              </thead>
-              <tbody className='bg-white'>
-                  {readings.map(item => {
-                        return <Reading deletefunction={deletefunction} id={item.id} key = {item.id} systolic={item.systolic} diastolic={item.diastolic} time={item.time} date={item.date} pulse={item.pulse} patient={item.patient}/>
-                  })}
-              </tbody>
+            <thead className='bg-[#008060] text-white'>
+              <tr>
+                <th className='md:text-lg px-1 text-sm'>Patient</th>
+                <th className='md:text-lg px-1 text-sm'>Date</th>
+                <th className='md:text-lg px-1 text-sm'>Time</th>
+                <th className='md:text-lg px-1 text-sm'>Systolic</th>
+                <th className='md:text-lg px-1 text-sm'>Diastolic</th>
+                <th className='md:text-lg px-1 text-sm'>Pulse</th>
+                <th className='md:text-lg px-1 text-sm'>Actions</th>
+              </tr>
+            </thead>
+            <tbody className='bg-white'>
+              {readings.map(item => {
+                return <Reading deletefunction={deletefunction} id={item.id} key={item.id} systolic={item.systolic} diastolic={item.diastolic} time={item.time} date={item.date} pulse={item.pulse} patient={item.patient} />
+              })}
+            </tbody>
           </table>
-          </>
+        </>
 
-        }
+      }
     </div>
   )
 }
